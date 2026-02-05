@@ -229,7 +229,7 @@ fun QRLoginScreen(onAuthenticated: (String) -> Unit) {
                 val canvas = android.graphics.Canvas(bitmap)
                 
                 // Fill entire background with dark color
-                canvas.drawColor(android.graphics.Color.parseColor("#131516"))
+                canvas.drawColor(android.graphics.Color.parseColor("#174D42"))
                 
                 // Draw rounded rectangle border around QR
                 val borderPaint = android.graphics.Paint().apply {
@@ -249,9 +249,9 @@ fun QRLoginScreen(onAuthenticated: (String) -> Unit) {
                 // Translate canvas to account for border padding
                 canvas.translate(borderPadding.toFloat(), borderPadding.toFloat())
                 
-                // Paint for rounded white dots (Instagram style)
+                // Paint for rounded dots
                 val dotPaint = android.graphics.Paint().apply {
-                    color = android.graphics.Color.WHITE  // White
+                    color = android.graphics.Color.WHITE  // White for dark background
                     style = android.graphics.Paint.Style.FILL
                     isAntiAlias = true
                 }
@@ -282,14 +282,14 @@ fun QRLoginScreen(onAuthenticated: (String) -> Unit) {
                 val innerMarkerRadius = 4f
                 
                 val outerMarkerPaint = android.graphics.Paint().apply {
-                    color = android.graphics.Color.WHITE  // White
+                    color = android.graphics.Color.WHITE  // White for dark background
                     style = android.graphics.Paint.Style.STROKE
                     strokeWidth = markerStrokeWidth
                     isAntiAlias = true
                 }
                 
                 val innerMarkerPaint = android.graphics.Paint().apply {
-                    color = android.graphics.Color.WHITE  // White
+                    color = android.graphics.Color.WHITE  // White for dark background
                     style = android.graphics.Paint.Style.FILL
                     isAntiAlias = true
                 }
@@ -470,7 +470,7 @@ fun QRLoginScreen(onAuthenticated: (String) -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF131516)),  // Dark background
+                .background(Color(0xFF174D42)),  // Dark background
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -492,7 +492,7 @@ fun QRLoginScreen(onAuthenticated: (String) -> Unit) {
                             modifier = Modifier
                                 .size(140.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(Color(0xFF131516)),
+                                .background(Color(0xFF174D42)),
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
@@ -508,7 +508,7 @@ fun QRLoginScreen(onAuthenticated: (String) -> Unit) {
                             modifier = Modifier
                                 .size(140.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(Color(0xFF131516))
+                                .background(Color(0xFF174D42))
                                 .border(
                                     width = 1.dp,
                                     color = Color.White,
@@ -522,7 +522,7 @@ fun QRLoginScreen(onAuthenticated: (String) -> Unit) {
                             ) {
                                 CircularProgressIndicator(
                                     indicatorColor = Color.White,
-                                    trackColor = Color(0xFF131516),
+                                    trackColor = Color(0xFF174D42),
                                     modifier = Modifier.size(32.dp)
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
