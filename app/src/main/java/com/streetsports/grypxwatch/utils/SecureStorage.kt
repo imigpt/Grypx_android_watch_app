@@ -1,4 +1,4 @@
-package com.example.grpyx_andd_watch.utils
+package com.streetsports.grypxwatch.utils
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -1,4 +1,4 @@
-package com.example.grpyx_andd_watch.presentation
+package com.streetsports.grypxwatch.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,8 +16,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.*
-import com.example.grpyx_andd_watch.network.PlayerInfo
-import com.example.grpyx_andd_watch.presentation.theme.Grpyx_andd_watchTheme
+import com.streetsports.grypxwatch.network.PlayerInfo
+import com.streetsports.grypxwatch.presentation.theme.Grpyx_andd_watchTheme
 
 /**
  * Player Selection Screen for Doubles Matches

@@ -1,4 +1,4 @@
-package com.example.grpyx_andd_watch.complication
+package com.streetsports.grypxwatch.complication
 
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType

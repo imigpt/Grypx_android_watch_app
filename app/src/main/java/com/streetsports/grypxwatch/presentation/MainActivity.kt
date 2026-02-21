@@ -3,7 +3,7 @@
  * most up to date changes to the libraries and their usages.
  */
 
-package com.example.grpyx_andd_watch.presentation
+package com.streetsports.grypxwatch.presentation
 
 import android.content.Context
 import android.os.Bundle
@@ -12,10 +12,10 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.grpyx_andd_watch.network.WatchApiClient
-import com.example.grpyx_andd_watch.network.SessionExpiredException
-import com.example.grpyx_andd_watch.network.SessionNotFoundException
-import com.example.grpyx_andd_watch.utils.SecureStorage
+import com.streetsports.grypxwatch.network.WatchApiClient
+import com.streetsports.grypxwatch.network.SessionExpiredException
+import com.streetsports.grypxwatch.network.SessionNotFoundException
+import com.streetsports.grypxwatch.utils.SecureStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -56,15 +56,15 @@ import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
-import com.example.grpyx_andd_watch.presentation.theme.Grpyx_andd_watchTheme
+import com.streetsports.grypxwatch.presentation.theme.Grpyx_andd_watchTheme
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import android.graphics.Bitmap
 import kotlinx.coroutines.delay
 import org.json.JSONObject
 import java.util.UUID
-import com.example.grpyx_andd_watch.network.WatchMatchService
-import com.example.grpyx_andd_watch.network.ActiveMatchResponse
+import com.streetsports.grypxwatch.network.WatchMatchService
+import com.streetsports.grypxwatch.network.ActiveMatchResponse
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

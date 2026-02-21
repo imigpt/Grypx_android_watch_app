@@ -1,4 +1,4 @@
-package com.example.grpyx_andd_watch.presentation.theme
+package com.streetsports.grypxwatch.presentation.theme
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.material.MaterialTheme

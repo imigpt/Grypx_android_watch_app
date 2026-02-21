@@ -1,4 +1,4 @@
-package com.example.grpyx_andd_watch.network
+package com.streetsports.grypxwatch.network
 
 import android.util.Log
 import kotlinx.coroutines.*
@@ -18,7 +18,7 @@ class WatchWebSocketService {
     
     companion object {
         private const val TAG = "WatchWebSocket"
-        private const val WS_URL = "ws://34.131.53.32:8080/ws/websocket"
+        private const val WS_URL = "wss://grypx.co/ws/websocket"
     }
     
     private var webSocket: WebSocket? = null
@@ -181,23 +181,66 @@ class WatchWebSocketService {
     private fun handleScoreUpdate(data: JSONObject) {
         val scoreState = data.optJSONObject("scoreState")
         
-        val team1Score = scoreState?.optInt("scoreA", 0) 
-            ?: data.optInt("team1Score", data.optInt("scoreA", 0))
-        val team2Score = scoreState?.optInt("scoreB", 0) 
-            ?: data.optInt("team2Score", data.optInt("scoreB", 0))
+        // Try to extract scores from various possible fields
+        val team1Score = when {
+            scoreState?.has("scoreA") == true -> scoreState.getInt("scoreA")
+            data.has("team1Score") -> data.getInt("team1Score")
+            data.has("scoreA") -> data.getInt("scoreA")
+            else -> null // Don't default to 0, keep null if no score found
+        }
+        
+        val team2Score = when {
+            scoreState?.has("scoreB") == true -> scoreState.getInt("scoreB")
+            data.has("team2Score") -> data.getInt("team2Score")
+            data.has("scoreB") -> data.getInt("scoreB")
+            else -> null
+        }
+        
+        // Only update if we have valid score data
+        if (team1Score == null && team2Score == null) {
+            Log.w(TAG, "No valid score data in update, ignoring")
+            return
+        }
+        
         val currentSet = data.optInt("currentSetNumber", data.optInt("currentSet", 1))
         val team1SetsWon = data.optInt("team1SetsWon", 0)
         val team2SetsWon = data.optInt("team2SetsWon", 0)
         
+        val finalTeam1Score = team1Score ?: 0
+        val finalTeam2Score = team2Score ?: 0
+        
+        val currentValue = _scoreUpdate.value
+        
+        // AGGRESSIVE 0-0 blocking: Never send 0-0 if we have existing non-zero scores in the same set
+        if (currentValue != null) {
+            val is00 = finalTeam1Score == 0 && finalTeam2Score == 0
+            val hasCurrentScore = currentValue.team1Score > 0 || currentValue.team2Score > 0
+            val sameSet = currentSet == currentValue.currentSet
+            
+            if (is00 && hasCurrentScore && sameSet) {
+                Log.w(TAG, "BLOCKED: 0-0 update while current score is ${currentValue.team1Score}-${currentValue.team2Score} (Set $currentSet)")
+                return
+            }
+            
+            // Also block if scores DECREASE (unless new set)
+            val scoreDecreased = (finalTeam1Score < currentValue.team1Score || finalTeam2Score < currentValue.team2Score)
+            val isNewSet = currentSet > currentValue.currentSet
+            
+            if (scoreDecreased && !isNewSet) {
+                Log.w(TAG, "BLOCKED: Score decrease from ${currentValue.team1Score}-${currentValue.team2Score} to $finalTeam1Score-$finalTeam2Score")
+                return
+            }
+        }
+        
         _scoreUpdate.value = ScoreUpdateEvent(
-            team1Score = team1Score,
-            team2Score = team2Score,
+            team1Score = finalTeam1Score,
+            team2Score = finalTeam2Score,
             currentSet = currentSet,
             team1SetsWon = team1SetsWon,
             team2SetsWon = team2SetsWon
         )
         
-        Log.d(TAG, "Score updated: $team1Score - $team2Score (Set $currentSet)")
+        Log.d(TAG, "\u2713 Score updated: $finalTeam1Score - $finalTeam2Score (Set $currentSet)")
     }
     
     private fun handleSetCompleted(data: JSONObject) {
@@ -215,16 +258,32 @@ class WatchWebSocketService {
             team2SetsWon = team2SetsWon
         )
         
-        // Also update the score (reset for new set)
-        _scoreUpdate.value = ScoreUpdateEvent(
-            team1Score = 0,
-            team2Score = 0,
-            currentSet = setNumber + 1,
-            team1SetsWon = team1SetsWon,
-            team2SetsWon = team2SetsWon
-        )
+        // ONLY reset to 0-0 for new set if explicitly a set completion event
+        // Check if the next set has actually started with score data
+        val nextSetScore1 = data.optInt("nextSetScore1", -1)
+        val nextSetScore2 = data.optInt("nextSetScore2", -1)
         
-        Log.d(TAG, "Set $setNumber completed: $team1SetScore - $team2SetScore")
+        if (nextSetScore1 >= 0 && nextSetScore2 >= 0) {
+            // Use provided next set scores
+            _scoreUpdate.value = ScoreUpdateEvent(
+                team1Score = nextSetScore1,
+                team2Score = nextSetScore2,
+                currentSet = setNumber + 1,
+                team1SetsWon = team1SetsWon,
+                team2SetsWon = team2SetsWon
+            )
+        } else {
+            // Reset to 0-0 for new set
+            _scoreUpdate.value = ScoreUpdateEvent(
+                team1Score = 0,
+                team2Score = 0,
+                currentSet = setNumber + 1,
+                team1SetsWon = team1SetsWon,
+                team2SetsWon = team2SetsWon
+            )
+        }
+        
+        Log.d(TAG, "Set $setNumber completed: $team1SetScore - $team2SetScore (Next set: ${setNumber + 1})")
     }
     
     private fun handleMatchEnd(data: JSONObject) {

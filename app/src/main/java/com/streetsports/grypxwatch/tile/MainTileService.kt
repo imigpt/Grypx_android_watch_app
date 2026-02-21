@@ -1,4 +1,4 @@
-package com.example.grpyx_andd_watch.tile
+package com.streetsports.grypxwatch.tile
 
 import android.content.Context
 import androidx.wear.protolayout.ColorBuilders.argb

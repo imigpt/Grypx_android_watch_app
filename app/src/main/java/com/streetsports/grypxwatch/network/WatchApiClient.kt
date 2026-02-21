@@ -1,4 +1,4 @@
-package com.example.grpyx_andd_watch.network
+package com.streetsports.grypxwatch.network
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
@@ -12,13 +12,13 @@ import java.util.concurrent.TimeUnit
 
 /**
  * API Client for GRYPX Watch QR Login
- * Base URL: http://34.131.53.32:8080
+ * Base URL: https://grypx.co
  * API Version: 1.0
  * Updated: January 21, 2026
  */
 class WatchApiClient(private val context: Context) {
     
-    private val baseUrl = "http://34.131.53.32:8080/api"
+    private val baseUrl = "https://api.grypx.co/api"
     
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)

@@ -1,4 +1,4 @@
-package com.example.grpyx_andd_watch.network
+package com.streetsports.grypxwatch.network
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
  * Service for watch match operations
  * Handles fetching active matches and scoring updates for racket sports
  * 
- * Base URL: http://34.131.53.32:8080
+ * Base URL: https://grypx.co
  * API Version: 1.0
  * Updated: January 22, 2026
  */
@@ -23,7 +23,7 @@ class WatchMatchService(private val authToken: String) {
     
     companion object {
         private const val TAG = "WatchMatchService"
-        private const val BASE_URL = "http://34.131.53.32:8080/api"
+        private const val BASE_URL = "https://api.grypx.co/api"
         
         // Sport types that support watch scoring
         val RACKET_SPORTS = listOf("badminton", "tennis", "pickleball", "table_tennis", "squash")
